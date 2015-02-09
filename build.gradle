@@ -9,7 +9,6 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 jar {
@@ -22,6 +21,7 @@ repositories {
 }
 
 dependencies {
+	compile("org.projectlombok:lombok:1.14.8")
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
@@ -34,4 +34,9 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
+}
+
+task startApp(dependsOn: 'classes', type: JavaExec) {
+	main = "myPasswords.MyPasswordApplication"
+   	classpath sourceSets.main.runtimeClasspath
 }

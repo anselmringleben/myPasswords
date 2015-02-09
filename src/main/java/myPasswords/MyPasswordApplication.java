@@ -1,4 +1,4 @@
-package test;
+package myPasswords;
 
 import java.util.Arrays;
 
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class TempApplication {
+public class MyPasswordApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext ctx = SpringApplication.run(TempApplication.class,
+		ApplicationContext ctx = SpringApplication.run(MyPasswordApplication.class,
 				args);
 
 		System.out.println("Beans provided by Spring Boot:");
