@@ -3,6 +3,7 @@ package myPasswords.data;
 import static org.junit.Assert.*;
 import lombok.extern.log4j.Log4j;
 import myPasswords.model.PasswordEntry;
+import myPasswords.repository.SimplePasswordRepository;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -5,4 +5,4 @@
  * @author anselm.ringleben
  *
  */
-package myPasswords.data;
+package myPasswords.repository;

@@ -3,8 +3,8 @@ package myPasswords.service;
 import java.util.List;
 
 import lombok.extern.log4j.Log4j;
-import myPasswords.data.PasswordRepository;
 import myPasswords.model.PasswordEntry;
+import myPasswords.repository.PasswordRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

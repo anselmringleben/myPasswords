@@ -1,4 +1,4 @@
-package myPasswords.data;
+package myPasswords.repository;
 
 import java.util.List;
 
