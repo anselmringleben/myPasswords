@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 @ComponentScan
 public class MyPasswordApplication {
+	
+	
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(MyPasswordApplication.class,
