@@ -19,7 +19,6 @@ import myPasswords.model.PasswordEntry;
 public class SimplePasswordRepository implements PasswordRepository {
 	HashMap<Long, PasswordEntry> entries = new HashMap<Long, PasswordEntry>();
 
-	@Override
 	public boolean put(PasswordEntry password) {
 		log.debug("Method: put called: " + password);
 
@@ -31,7 +30,6 @@ public class SimplePasswordRepository implements PasswordRepository {
 		return true;
 	}
 
-	@Override
 	public PasswordEntry get(String id) {
 		log.debug("Method: get called: " + id);
 		
@@ -41,7 +39,6 @@ public class SimplePasswordRepository implements PasswordRepository {
 		return entries.get(new Long(id));
 	}
 
-	@Override
 	public boolean delete(String id) {
 		log.debug("Method: delete called: " + id);
 		
@@ -53,7 +50,6 @@ public class SimplePasswordRepository implements PasswordRepository {
 		return true;
 	}
 
-	@Override
 	public List<PasswordEntry> getList(String category) {
 		log.debug("Method: getList called: " + category);
 
@@ -67,7 +63,6 @@ public class SimplePasswordRepository implements PasswordRepository {
 		return results;
 	}
 
-	@Override
 	public int size() {
 		log.debug("Method: size called");
 		
