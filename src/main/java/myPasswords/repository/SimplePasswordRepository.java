@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Repository;
 
 import lombok.extern.log4j.Log4j;
@@ -19,6 +21,17 @@ import myPasswords.model.PasswordEntry;
 public class SimplePasswordRepository implements PasswordRepository {
 	HashMap<Long, PasswordEntry> entries = new HashMap<Long, PasswordEntry>();
 
+	@PostConstruct
+	public void init() {
+		PasswordEntry entry = new PasswordEntry();
+		entry.setId(0);
+		entry.setCategory("TestCategory");
+		entry.setName("Test");
+		entry.setPassword("Test123");
+		
+		this.put(entry);
+	}
+	
 	public boolean put(PasswordEntry password) {
 		log.debug("Method: put called: " + password);
 

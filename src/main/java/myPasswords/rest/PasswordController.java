@@ -19,35 +19,40 @@ import org.springframework.web.bind.annotation.RestController;
  * REST interface for password related requests
  * 
  * @author anselm.ringleben
- *
+ * 
  */
 @RestController
 @RequestMapping("/passwords")
 @Log4j
 public class PasswordController {
-	
+
 	@Autowired
 	private PasswordService service;
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public List<PasswordEntry> getList(@RequestParam(value = "category", defaultValue = "") String category) {
+	@RequestMapping(method = RequestMethod.GET)
+	public List<PasswordEntry> getList(
+			@RequestParam(value = "category", defaultValue = "") String category) {
 		log.debug("Method: getList called: " + category);
-		
+
 		List<PasswordEntry> results = service.getPasswordList(category);
+		log.debug("Result: " + results);
 
 		return results;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public PasswordEntry getPassword(@PathVariable String id) {
 		log.debug("Method: getPassword called: " + id);
-		
-		return service.getPasswordEntry(id);
+
+		PasswordEntry result = service.getPasswordEntry(id);
+		log.debug("Result: " + result);
+
+		return result;
 	}
-	
-	@RequestMapping(method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_VALUE})
+
+	@RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public void postNewPassword(@RequestBody PasswordEntry password) {
 		log.debug("Method: postNewPassword called: " + password);
-		
+
 	}
 }

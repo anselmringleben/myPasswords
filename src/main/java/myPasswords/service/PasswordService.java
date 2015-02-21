@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * Business service for password related processing
  * 
  * @author anselm.ringleben
- *
+ * 
  */
 @Service
 @Log4j
@@ -29,10 +29,16 @@ public class PasswordService {
 
 		return results;
 	}
-	
+
 	public PasswordEntry getPasswordEntry(String id) {
 		log.debug("Method: getPasswordEntry called: " + id);
-		
+
 		return repository.get(id);
+	}
+
+	public void setPasswordEntry(PasswordEntry entry) {
+		log.debug("Method: setPasswordEntry called: " + entry);
+
+		repository.put(entry);
 	}
 }

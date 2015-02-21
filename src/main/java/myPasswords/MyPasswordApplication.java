@@ -19,12 +19,12 @@ public class MyPasswordApplication {
 		ApplicationContext ctx = SpringApplication.run(MyPasswordApplication.class,
 				args);
 
-		System.out.println("Beans provided by Spring Boot:");
-		
-		String[] beanNames = ctx.getBeanDefinitionNames();
-		Arrays.sort(beanNames);
-		for (String name : beanNames) {
-			System.out.println(name);
-		}
+		// System.out.println("Beans provided by Spring Boot:");
+		//
+		// String[] beanNames = ctx.getBeanDefinitionNames();
+		// Arrays.sort(beanNames);
+		// for (String name : beanNames) {
+		// System.out.println(name);
+		// }
 	}
 }
