@@ -1,12 +1,14 @@
-/**
- * 
- */
+(function() {
+	var app = angular.module('myPassword', []);
 
-'use strict';
-
-angular.module('myPassword', [])
-	.controller('PasswordCtrl', function($scope, $http){
-		$http.get('./password/list').then(function(passwordResponse) {
-			$scope.passwords = passwordResponse.data;
+	app.controller('PasswordCtrl', [ '$http', '$log', function($http, $log) {
+		var store = this;
+		store.passwords = [];
+		$http.get('http://localhost:8080/passwords').success(function(data) {
+			$log.debug('Retrieved: ' + data)
+			store.passwords = data;
+		}).error(function(data, status, headers) {
+			$log.error(data + ' ' + status + ' ' + headers);
 		});
-	});
+	} ]);
+})();
