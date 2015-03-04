@@ -1,5 +1,43 @@
 (function() {
-	var app = angular.module('myPassword', []);
+	var app = angular.module('myPassword', [ 'ngRoute' ]);
+
+	app.config([ '$routeProvider', function($routeProvider) {
+		$routeProvider.when('/table', {
+			templateUrl : 'table.html'
+		});
+
+		$routeProvider.when('/login', {
+			templateUrl : 'login.html',
+			controller : 'LoginCtrl'
+		});
+
+		$routeProvider.otherwise({
+			redirectTo : '/login'
+		});
+
+		// $locationProvider.hashPrefix('!');
+		//
+		// $httpProvider.interceptors.push(function($q, $rootScope,
+		// $location) {
+		// return {
+		// 'responseError' : function(rejection) {
+		// var status = rejection.status;
+		// var config = rejection.config;
+		// var method = config.method;
+		// var url = config.url;
+		//
+		// if (status == 401) {
+		// $location.path("/login");
+		// } else {
+		// $rootScope.error = method + " on " + url
+		// + " failed with status " + status;
+		// }
+		//
+		// return $q.reject(rejection);
+		// }
+		// };
+		// });
+	} ]);
 
 	app.controller('PasswordCtrl', [ '$http', '$log', function($http, $log) {
 		var store = this;
@@ -33,6 +71,23 @@
 												+ ' ' + status);
 									});
 					$scope.password = {};
+				};
+			} ]);
+
+	app.controller('LoginCtrl', [
+			'$scope',
+			'$rootScope',
+			'$location',
+			function($scope, $rootScope, $location) {
+
+				$scope.login = function() {
+					if ($scope.username === "test"
+							&& $scope.password === "abc123") {
+						delete $rootScope.error;
+						$location.path('/table');
+					} else {
+						$rootScope.error = "Wrong Username/Password Combination!";
+					}
 				};
 			} ]);
 })();

@@ -1,0 +1,36 @@
+
+<div class="container">
+	<form class="form-horizontal">
+		<label id="search" class="col-sm-1 control-label">Search</label>
+		<div class="col-sm-3">
+			<input type="text" ng-model="search" class="form-control" />
+			<p ng-show="search">You're searching for: {{search}}</p>
+		</div>
+	</form>
+</div>
+
+<table class="table" ng-controller="PasswordCtrl as store">
+	<tr ng-repeat="password in store.passwords | filter:search">
+		<td>{{password.id}}</td>
+		<td>{{password.name}}</td>
+		<td>{{password.password}}</td>
+	</tr>
+</table>
+
+<div ng-controller="PasswordInputCtrl as input">
+	<form novalidate name="passwordInput" class="form-horizontal"
+		ng-input="send(password)">
+		<div class="form-group">
+			<label id="username" class="col-sm-1 control-label">Name:</label>
+			<div class="col-sm-3">
+				<input type="text" ng-model="password.name" class="form-control" />
+			</div>
+			<label id="password" class="col-sm-1 control-label">Password:</label>
+			<div class="col-sm-3">
+				<input type="text" ng-model="password.password" class="form-control" />
+			</div>
+			<input type="button" ng-click="send(password)" value="Save"
+				class="btn" />
+		</div>
+	</form>
+</div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html ng-app="myPassword">
 <head>
+<title>MyPasswords</title>
 <link rel="stylesheet" type="text/css"
 	href="http://localhost:8080/webjars/bootstrap/3.3.2/css/bootstrap.min.css" />
-
 </head>
 <body>
 	<div class="page-header">
@@ -11,30 +11,14 @@
 	</div>
 
 	<div class="container">
-		<form>
-			<input type="text" ng-model="search">
-			<p ng-show="search">Du suchst gerade nach: {{search}}</p>
-		</form>
-	</div>
-
-	<table class="table" ng-controller="PasswordCtrl as store">
-		<tr ng-repeat="password in store.passwords | filter:search">
-			<td>{{password.id}}</td>
-			<td>{{password.name}}</td>
-			<td>{{password.password}}</td>
-		</tr>
-	</table>
-
-	<div ng-controller="PasswordInputCtrl as input">
-		<form novalidate name="passwordInput" class="simple-form" ng-input="send(password)">
-			Name: <input type="text" ng-model="password.name" /> Password: <input
-				type="text" ng-model="password.password" /> <input type="button"
-				ng-click="send(password)" value="Save" />
-		</form>
+		<div class="alert alert-danger" ng-show="error">{{error}}</div>
+		<div ng-view></div>
 	</div>
 
 	<script type="text/javascript"
 		src="http://localhost:8080/webjars/angularjs/1.3.13/angular.js"></script>
+	<script type="text/javascript"
+		src="http://localhost:8080/webjars/angularjs/1.3.13/angular-route.js"></script>
 	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>
