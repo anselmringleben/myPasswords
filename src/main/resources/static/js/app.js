@@ -3,11 +3,11 @@
 
 	app.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/table', {
-			templateUrl : 'table.html'
+			templateUrl : 'partials/table.html'
 		});
 
 		$routeProvider.when('/login', {
-			templateUrl : 'login.html',
+			templateUrl : 'partials/login.html',
 			controller : 'LoginCtrl'
 		});
 
