@@ -3,7 +3,6 @@ package myPasswords.security;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Component;
 
@@ -12,20 +11,19 @@ public class TokenUtils {
 	private final String MAGIC_KEY = "obfuscate";
 	private final String SEPARATOR = ":";
 
-	public String createToken(UserDetails userDetails) {
+	public String createToken(String username, String password) {
 		long expires = System.currentTimeMillis() + 1000L * 60 * 60;
 
-		return userDetails.getUsername() + this.SEPARATOR + expires
-				+ this.SEPARATOR + computeSignature(userDetails, expires);
+		return username + this.SEPARATOR + expires + this.SEPARATOR
+				+ computeSignature(username, password, expires);
 	}
 
-	private String computeSignature(UserDetails userDetails, long expires) {
+	private String computeSignature(String username, String password,
+			long expires) {
 		StringBuilder signatureBuilder = new StringBuilder();
-		signatureBuilder.append(userDetails.getUsername()).append(
-				this.SEPARATOR);
+		signatureBuilder.append(username).append(this.SEPARATOR);
 		signatureBuilder.append(expires).append(this.SEPARATOR);
-		signatureBuilder.append(userDetails.getPassword()).append(
-				this.SEPARATOR);
+		signatureBuilder.append(password).append(this.SEPARATOR);
 		signatureBuilder.append(this.MAGIC_KEY);
 
 		MessageDigest digest;
@@ -42,16 +40,18 @@ public class TokenUtils {
 	public String getUserNameFromToken(String authToken) {
 		if (null == authToken)
 			return null;
-		
+
 		String[] parts = authToken.split(this.SEPARATOR);
 		return parts[0];
 	}
 
-	public boolean validateToken(String authToken, UserDetails userDetails) {
+	public boolean validateToken(String authToken, String username,
+			String password) {
 		String[] parts = authToken.split(this.SEPARATOR);
 		long expires = Long.parseLong(parts[1]);
 		String signature = parts[2];
-		String signatureToCompare = computeSignature(userDetails, expires);
+		String signatureToCompare = computeSignature(username, password,
+				expires);
 
 		return expires >= System.currentTimeMillis()
 				&& signature.equals(signatureToCompare);

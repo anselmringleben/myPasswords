@@ -14,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,9 +29,6 @@ public class LoginController {
 	@Autowired
 	private TokenUtils tokenUtils;
 
-	@Autowired
-	private UserDetailsService userDetailService;
-
 	@RequestMapping(value = "/login", method = { RequestMethod.POST })
 	public UserTransfer authorize(@RequestParam String username,
 			@RequestParam String password) {
@@ -46,15 +41,12 @@ public class LoginController {
 		Authentication authentication = this.authManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		UserDetails details = this.userDetailService
-				.loadUserByUsername(username);
-
-		for (GrantedAuthority authority : details.getAuthorities()) {
+		for (GrantedAuthority authority : authentication.getAuthorities()) {
 			roles.put(authority.toString(), Boolean.TRUE);
 		}
 
-		return new UserTransfer(details.getUsername(), roles,
-				this.tokenUtils.createToken(details));
+		return new UserTransfer(authentication.getName(), roles,
+				this.tokenUtils.createToken(username, password));
 	}
 
 	@AllArgsConstructor

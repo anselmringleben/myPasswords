@@ -42,7 +42,8 @@ public class XAuthTokenFilter extends GenericFilterBean {
 			UserDetails details = this.detailsService
 					.loadUserByUsername(username);
 
-			if (this.tokenUtils.validateToken(authToken, details)) {
+			if (this.tokenUtils.validateToken(authToken, details.getUsername(),
+					details.getPassword())) {
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 						details, details.getPassword(),
 						details.getAuthorities());
