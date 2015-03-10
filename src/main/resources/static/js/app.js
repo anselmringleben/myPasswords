@@ -1,43 +1,86 @@
 (function() {
-	var app = angular.module('myPassword', [ 'ngRoute' ]);
+	var xAuthTokenHeaderName = 'x-auth-token';
 
-	app.config([ '$routeProvider', function($routeProvider) {
-		$routeProvider.when('/table', {
-			templateUrl : 'partials/table.html'
-		});
+	var app = angular
+			.module('myPassword', [ 'ngRoute', 'myPassword.services' ]);
 
-		$routeProvider.when('/login', {
-			templateUrl : 'partials/login.html',
-			controller : 'LoginCtrl'
-		});
+	app.config(
+			[
+					'$routeProvider',
+					'$locationProvider',
+					'$httpProvider',
+					function($routeProvider, $locationProvider, $httpProvider) {
+						$routeProvider.when('/table', {
+							templateUrl : 'partials/table.html'
+						});
 
-		$routeProvider.otherwise({
-			redirectTo : '/login'
-		});
+						$routeProvider.when('/login', {
+							templateUrl : 'partials/login.html',
+							controller : LoginController
+						});
 
-		// $locationProvider.hashPrefix('!');
-		//
-		// $httpProvider.interceptors.push(function($q, $rootScope,
-		// $location) {
-		// return {
-		// 'responseError' : function(rejection) {
-		// var status = rejection.status;
-		// var config = rejection.config;
-		// var method = config.method;
-		// var url = config.url;
-		//
-		// if (status == 401) {
-		// $location.path("/login");
-		// } else {
-		// $rootScope.error = method + " on " + url
-		// + " failed with status " + status;
-		// }
-		//
-		// return $q.reject(rejection);
-		// }
-		// };
-		// });
-	} ]);
+						$routeProvider.otherwise({
+							redirectTo : '/login'
+						});
+
+						$locationProvider.hashPrefix('!');
+
+						var interceptor = function($rootScope, $q, $location) {
+							function success(response) {
+								return response;
+							}
+
+							function error(response) {
+								var status = response.status;
+								var config = response.config;
+								var method = config.method;
+								var url = config.url;
+
+								if (status == 401) {
+									$location.path("/login");
+								} else {
+									$rootScope.error = method + " on " + url
+											+ " failed with status " + status;
+								}
+
+								return $q.reject(response);
+							}
+
+							return function(promise) {
+								return promise.then(success, error);
+							};
+						};
+
+						$httpProvider.interceptors.push(interceptor);
+
+					} ]).run(
+			function($rootScope, $http, $location, LoginService) {
+				$rootScope.$on('$viewContentLoaded', function() {
+					delete $rootScope.error;
+				});
+
+				$rootScope.hasRole = function(role) {
+					if ($rootScope.user === undefined) {
+						return false;
+					}
+
+					if ($rootScope.user.roles[role] === undefined) {
+						return false;
+					}
+
+					return $rootScope.user.roles[role];
+				};
+
+				$rootScope.logout = function() {
+					delete $rootScope.user;
+					delete $http.defaults.headers.common[xAuthTokenHeaderName];
+					$location.path("/login");
+				};
+
+				if ($rootScope.user === undefined) {
+					$location.path("/login");
+				}
+			});
 
 	app.controller('PasswordCtrl', [ '$http', '$log', function($http, $log) {
 		var store = this;
@@ -74,20 +117,19 @@
 				};
 			} ]);
 
-	app.controller('LoginCtrl', [
-			'$scope',
-			'$rootScope',
-			'$location',
-			function($scope, $rootScope, $location) {
-
-				$scope.login = function() {
-					if ($scope.username === "test"
-							&& $scope.password === "abc123") {
-						delete $rootScope.error;
-						$location.path('/table');
-					} else {
-						$rootScope.error = "Wrong Username/Password Combination!";
-					}
-				};
-			} ]);
+	function LoginController($scope, $rootScope, $location, $http, LoginService) {
+		$scope.login = function() {
+			LoginService
+					.authenticate(
+							$.param({
+								username : $scope.username,
+								password : $scope.password
+							}),
+							function(user) {
+								$rootScope.user = user;
+								$http.defaults.headers.common[xAuthTokenHeaderName] = user.token;
+								$location.path("/table");
+							});
+		};
+	}
 })();
