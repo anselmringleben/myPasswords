@@ -1,14 +1,13 @@
 (function() {
-	var xAuthTokenHeaderName = 'x-auth-token';
-
-	var app = angular
-			.module('myPassword', [ 'ngRoute', 'myPassword.services' ]);
+	var app = angular.module('myPassword', [ 'ngRoute', 'myPassword.services',
+			'myPassword.config' ]);
 
 	app.config(
 			[
 					'$routeProvider',
 					'$locationProvider',
 					'$httpProvider',
+					'xAuthTokenHeaderName',
 					function($routeProvider, $locationProvider, $httpProvider) {
 						$routeProvider.when('/table', {
 							templateUrl : 'partials/table.html'
@@ -29,7 +28,8 @@
 								.push('errorResponseInterceptor');
 
 					} ]).run(
-			function($rootScope, $http, $location, LoginService) {
+			function($rootScope, $http, $location, LoginService,
+					xAuthTokenHeaderName) {
 				$rootScope.$on('$viewContentLoaded', function() {
 					delete $rootScope.error;
 				});
@@ -46,7 +46,7 @@
 					return $rootScope.user.roles[role];
 				};
 
-				$rootScope.logout = function() {
+				$rootScope.logout = function(xAuthTokenHeaderName) {
 					delete $rootScope.user;
 					delete $http.defaults.headers.common[xAuthTokenHeaderName];
 					$location.path("/login");
@@ -92,7 +92,8 @@
 				};
 			} ]);
 
-	function LoginController($scope, $rootScope, $location, $http, LoginService) {
+	function LoginController($scope, $rootScope, $location, $http,
+			LoginService, xAuthTokenHeaderName) {
 		$scope.login = function() {
 			LoginService
 					.authenticate(
