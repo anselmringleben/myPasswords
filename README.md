@@ -1,5 +1,5 @@
 # myPasswords
-Project for small password manager using `Spring Boot` and `AngularJS`
+Project for small password manager using `Spring Boot`, `Spring Security` and `AngularJS`
 
 ## How to start Project
 1. in eclipse: run `MyPasswordApplication.java`; with gradle: execute on command line `gradle bootRun`
